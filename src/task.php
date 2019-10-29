@@ -1,5 +1,5 @@
 <?php
-namespace htmlacademy\actions;
+namespace Htmlacademy;
 
 class Task {
 	private $actions = ["create", "start", "approve", "cancel", "degree"];

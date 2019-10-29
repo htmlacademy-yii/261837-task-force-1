@@ -1,5 +1,6 @@
 <?php
-require_once("task.php");
+use Htmlacademy\Task;
+require_once "vendor/autoload.php";
 
 $task = new Task(1, 2, date("Y-m-d"));
 print("Тест класса Task<br>");
