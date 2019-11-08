@@ -54,7 +54,42 @@ CREATE TABLE IF NOT EXISTS reviews (
   vote TINYINT NOT NULL,
   author_id INT NOT NULL,
   user_id INT NOT NULL,
-  message TEXT NOT NULL
+  message TEXT NOT NULL,
+  created_at INT
+);
+
+CREATE TABLE IF NOT EXISTS responces (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  budget INT NOT NULL,
+  author_id INT NOT NULL,
+  task_id INT NOT NULL,
+  message TEXT NOT NULL,
+  is_rejected TINYINT DEFAULT 0,
+  is_approved TINYINT DEFAULT 0,
+  created_at INT
+);
+
+CREATE TABLE IF NOT EXISTS notices (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  task_id INT NOT NULL,
+  user_id INT NOT NULL,
+  message TEXT NOT NULL,
+  is_readed TINYINT DEFAULT 0,
+  created_at INT
+);
+
+CREATE TABLE IF NOT EXISTS correspondence (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  message TEXT NOT NULL,
+  created_at INT
+);
+
+CREATE TABLE IF NOT EXISTS photos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  link VARCHAR(256) NOT NULL,
+  created_at INT
 );
 
 CREATE TABLE IF NOT EXISTS tasks (
@@ -68,7 +103,8 @@ CREATE TABLE IF NOT EXISTS tasks (
   address TEXT,
   expire INT,
   city_id INT,
-  budget INT
+  budget INT,
+  created_at INT
 );
 
 CREATE TABLE IF NOT EXISTS files (
@@ -78,8 +114,8 @@ CREATE TABLE IF NOT EXISTS files (
 );
 
 CREATE UNIQUE INDEX email ON users(email);
-CREATE INDEX username ON users(username);
-CREATE INDEX name ON tasks(name);
+CREATE FULLTEXT INDEX username ON users(username);
+CREATE FULLTEXT INDEX name ON tasks(name);
 ALTER TABLE specializations
   ADD FOREIGN KEY fk_s_category_id (category_id)
   REFERENCES users (id)
@@ -127,4 +163,28 @@ ALTER TABLE reviews
 ALTER TABLE users
   ADD FOREIGN KEY fk_u_city_id (city_id)
   REFERENCES cities (id)
+  ON DELETE CASCADE;
+ALTER TABLE responces
+  ADD FOREIGN KEY fk_res_author_id (author_id)
+  REFERENCES users (id)
+  ON DELETE CASCADE;
+ALTER TABLE responces
+  ADD FOREIGN KEY fk_res_task_id (task_id)
+  REFERENCES tasks (id)
+  ON DELETE CASCADE;
+ALTER TABLE notices
+  ADD FOREIGN KEY fk_n_user_id (user_id)
+  REFERENCES users (id)
+  ON DELETE CASCADE;
+ALTER TABLE notices
+  ADD FOREIGN KEY fk_n_task_id (task_id)
+  REFERENCES tasks (id)
+  ON DELETE CASCADE;
+ALTER TABLE correspondence
+  ADD FOREIGN KEY fk_cor_city_id (user_id)
+  REFERENCES users (id)
+  ON DELETE CASCADE;
+ALTER TABLE photos
+  ADD FOREIGN KEY fk_ph_user_id (user_id)
+  REFERENCES users (id)
   ON DELETE CASCADE;
