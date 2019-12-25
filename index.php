@@ -6,6 +6,7 @@ use Htmlacademy\Actions\FinishAction;
 use Htmlacademy\Actions\RefuseAction;
 use Htmlacademy\Actions\RespondAction;
 use Htmlacademy\Actions\ChatAction;
+use Htmlacademy\Exceptions\UserException;
 
 require_once "vendor/autoload.php";
 
@@ -22,6 +23,13 @@ var_dump($strategy->getAvailableActions(1, AvailableActions::OWNER) === [AcceptA
 var_dump($strategy->getAvailableActions(2, AvailableActions::PERFORMER) === [RespondAction::class]);
 var_dump($strategy->getAvailableActions(2, AvailableActions::OTHER) === []);
 print("<br>");
+
+try {
+    $strategy->getNextStatus("user");
+} catch (UserException $exc) {
+    print("Исключение: " . $exc->getMessage() . "<br>в файле " . $exc->getFile() . "<br>в строке " . $exc->getLine());
+    print("<br>");
+}
 
 print("Тест действий для заданий в работе<br>");
 $strategy = new AvailableActions(AvailableActions::STATUS_PROCESSING, 1 , 2, '2019-12-22');

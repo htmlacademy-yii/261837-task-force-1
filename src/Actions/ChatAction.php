@@ -2,13 +2,13 @@
 namespace Htmlacademy\Actions;
 
 class ChatAction extends Action {
-    public static function getName() {
+    public static function getName(): string {
         return "Написать сообщение";
     }
-    public static function getInternalName() {
+    public static function getInternalName(): string {
         return "chat";
     }
-    public static function checkUserAccess($userId, $role, $strategy) {
+    public static function checkUserAccess(int $userId, string $role, AvailableActions $strategy): bool {
         return $strategy->getPerformerId() && in_array($userId, [$strategy->getUserId(), $strategy->getPerformerId()]) && $strategy->getStatus() === AvailableActions::STATUS_PROCESSING;
     }
 }
